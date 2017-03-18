@@ -1,0 +1,29 @@
+.scores {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  list-style: none;
+  padding: 1em;
+
+  &__score {
+    border: 0;
+    border-radius: 50%;
+    color: $white;
+    height: 6em;
+    margin: 1em;
+    width: 6em;
+
+    &--red {
+      background-color: $red;
+    }
+
+    &--amber {
+      background-color: $orange;
+    }
+
+    &--green {
+      background-color: $green;
+    }
+  }
+}

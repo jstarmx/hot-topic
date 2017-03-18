@@ -1,0 +1,38 @@
+{
+  "extends": "stylelint-config-standard",
+  "plugins": [
+    "stylelint-order"
+  ],
+  "rules": {
+    "color-named": "never",
+    "color-no-hex": true,
+    "declaration-no-important": true,
+    "declaration-property-unit-whitelist": {
+      "/^animation/": ["ms"],
+      "border": ["rem", "em"],
+      "border-radius": ["rem", "em", "%"],
+      "border-width": ["rem", "em"],
+      "font-size": ["rem", "em", "%", "vw"],
+      "height": ["rem", "em", "%", "vh"],
+      "line-height": ["rem", "em"],
+      "max-height": ["rem", "em", "%"],
+      "max-width": ["rem", "em", "%"],
+      "min-height": ["rem", "em", "%"],
+      "min-width": ["rem", "em", "%"],
+      "width": ["rem", "em", "%"]
+    },
+    "font-family-name-quotes": "always-unless-keyword",
+    "font-weight-notation": "numeric",
+    "function-comma-space-after": "never",
+    "function-max-empty-lines": 0,
+    "function-url-quotes": "always",
+    "max-empty-lines": 1,
+    "order/properties-alphabetical-order": true,
+    "no-empty-source": null,
+    "selector-attribute-quotes": "always",
+    "selector-max-empty-lines": 0,
+    "selector-no-id": true,
+    "string-quotes": "double",
+    "value-list-max-empty-lines": 0
+  }
+}

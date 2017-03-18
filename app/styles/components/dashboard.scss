@@ -1,0 +1,59 @@
+.dashboard {
+  padding: 1em;
+
+  &__table {
+    margin-top: 2em;
+  }
+
+  &__light {
+    border-radius: 50%;
+    display: block;
+    height: 2em;
+    margin: 0 auto;
+    width: 2em;
+
+    &--red {
+      background-color: $red;
+    }
+
+    &--amber {
+      background-color: $orange;
+    }
+
+    &--green {
+      background-color: $green;
+    }
+  }
+
+  &__score {
+    text-align: center;
+
+    &--max {
+      font-weight: 700;
+    }
+
+    &--red {
+      color: $state-danger-text;
+
+      &.dashboard__score--max {
+        background-color: $state-danger-bg;
+      }
+    }
+
+    &--amber {
+      color: $state-warning-text;
+
+      &.dashboard__score--max {
+        background-color: $state-warning-bg;
+      }
+    }
+
+    &--green {
+      color: $state-success-text;
+
+      &.dashboard__score--max {
+        background-color: $state-success-bg;
+      }
+    }
+  }
+}
