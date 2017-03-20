@@ -7,9 +7,10 @@ const server = require('http').createServer();
 const WebSocket = require('ws');
 
 const app = express();
-const pool = new Pool();
+const pool = new Pool(process.env.DATABASE_URL);
 const wss = new WebSocket.Server({ server });
 
+app.set('port', (process.env.PORT || 8080));
 app.use(express.static(path.join(__dirname, '/public')));
 
 const error = err => console.log('error running query', err);
@@ -66,4 +67,6 @@ wss.on('connection', (ws) => {
 });
 
 server.on('request', app);
-server.listen(8080, () => console.log('Listening on http://localhost:8080'));
+server.listen(app.get('port'), () => {
+  console.log('Node app is running on port', app.get('port'));
+});

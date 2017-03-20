@@ -4,8 +4,8 @@ import { last } from 'lodash';
 
 import Vote from './components/vote';
 
-const host = document.location.host.replace(/:.*/, '');
-const ws = new WebSocket(`ws://${host}:8080`);
+const HOST = location.origin.replace(/^http/, 'ws');
+const ws = new WebSocket(HOST);
 const send = score => ws.send(JSON.stringify({ action: 'vote', score }));
 const vote = document.querySelector('.vote');
 
