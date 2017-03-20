@@ -1,15 +1,5 @@
 import React, { PropTypes } from 'react';
-import { maxBy } from 'lodash';
-
-const classList = (scores, score) => {
-  let classes = `dashboard__score dashboard__score--${score.label}`;
-
-  if (score.score === maxBy(scores, 'score').score && score.score > 0) {
-    classes += ' dashboard__score--max';
-  }
-
-  return classes;
-};
+import { max } from 'lodash';
 
 const Dashboard = React.createClass({
   propTypes: {
@@ -29,6 +19,13 @@ const Dashboard = React.createClass({
     e.preventDefault();
     this.props.add(this.state.newTopic);
     this.setState({ newTopic: '' });
+  },
+
+  scoreClass(scores, score, colorName) {
+    const classList = `dashboard__score dashboard__score--${colorName}`;
+    const isMax = score === max(scores) && score > 0;
+
+    return isMax ? `${classList} dashboard__score--max` : classList;
   },
 
   render() {
@@ -56,19 +53,18 @@ const Dashboard = React.createClass({
             </tr>
           </thead>
           <tbody>
-            {topics.map(({ id, name, scores }) => (
-              <tr key={id}>
-                <td>{name}</td>
-                {scores.map(score => (
-                  <td
-                    className={classList(scores, score)}
-                    key={score.id}
-                  >
-                    {score.score}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {topics.map(({ id, topic, red, amber, green }) => {
+              const colors = [red, amber, green];
+
+              return (
+                <tr key={id}>
+                  <td>{topic}</td>
+                  <td className={this.scoreClass(colors, red, 'red')}>{red}</td>
+                  <td className={this.scoreClass(colors, amber, 'amber')}>{amber}</td>
+                  <td className={this.scoreClass(colors, green, 'green')}>{green}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
