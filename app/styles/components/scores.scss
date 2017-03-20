@@ -16,14 +16,26 @@
 
     &--red {
       background-color: $red;
+
+      &:focus {
+        box-shadow: 0 0 0 1em darken($red,15%);
+      }
     }
 
     &--amber {
       background-color: $orange;
+
+      &:focus {
+        box-shadow: 0 0 0 1em darken($orange,15%);
+      }
     }
 
     &--green {
       background-color: $green;
+
+      &:focus {
+        box-shadow: 0 0 0 1em darken($green,15%);
+      }
     }
   }
 }

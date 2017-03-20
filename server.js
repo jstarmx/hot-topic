@@ -7,18 +7,20 @@ const server = require('http').createServer();
 const url = require('url');
 const WebSocket = require('ws');
 
-const DATABASE_URL = process.env.DATABASE_URL || 'postgres://jvmidqpwvwhcyo:69f28e00fa8eb004639aed3865c80be2313ffa5b1c48efdb553794e8f5d7f545@ec2-54-75-239-190.eu-west-1.compute.amazonaws.com:5432/dbbjt1hnhpbash;';
+let config = {};
 
-const params = url.parse(DATABASE_URL);
-const auth = params.auth.split(':');
-const config = {
-  user: auth[0],
-  password: auth[1],
-  host: params.hostname,
-  port: params.port,
-  database: params.pathname.split('/')[1],
-  ssl: true,
-};
+if (process.env.DATABASE_URL) {
+  const params = url.parse(process.env.DATABASE_URL);
+  const auth = params.auth.split(':');
+  config = {
+    user: auth[0],
+    password: auth[1],
+    host: params.hostname,
+    port: params.port,
+    database: params.pathname.split('/')[1],
+    ssl: true,
+  };
+}
 
 const pool = new Pool(config);
 const wss = new WebSocket.Server({ server });
