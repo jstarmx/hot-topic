@@ -1,51 +1,69 @@
+/* eslint-disable no-console */
+
 const express = require('express');
-const cloneDeep = require('lodash/cloneDeep');
-const find = require('lodash/find');
-const last = require('lodash/last');
 const path = require('path');
+const Pool = require('pg').Pool;
 const server = require('http').createServer();
 const WebSocket = require('ws');
 
 const app = express();
+const pool = new Pool();
+const wss = new WebSocket.Server({ server });
+
 app.use(express.static(path.join(__dirname, '/public')));
 
-const wss = new WebSocket.Server({ server });
-const topics = [];
-let id = 1;
-const scores = [
-  { id: 1, label: 'red', score: 0 },
-  { id: 2, label: 'amber', score: 0 },
-  { id: 3, label: 'green', score: 0 },
-];
+const error = err => console.log('error running query', err);
+
+const fetch = () =>
+  pool.query('SELECT * FROM session2')
+    .then(res => wss.broadcast(res.rows))
+    .catch(err => error(err));
+
+const update = query =>
+  pool.query(query)
+    .then(() => fetch())
+    .catch(err => error(err));
+
+const add = name =>
+  update(`INSERT INTO session2(topic, red, amber, green) VALUES ('${name}', 0, 0, 0)`);
+
+const current = () =>
+  pool.query('SELECT * FROM session2 ORDER BY id DESC LIMIT 1')
+    .catch(err => error(err));
+
+const vote = score =>
+  current()
+    .then((res) => {
+      const latest = res.rows[0].id;
+      const query = `UPDATE session2 SET ${score} = ${score} + 1 WHERE id = ${latest}`;
+      update(query);
+    })
+    .catch(err => error(err));
+
+wss.broadcast = (message) => {
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(message));
+    }
+  });
+};
 
 wss.on('connection', (ws) => {
-  wss.broadcast();
+  fetch();
 
   ws.on('message', (_data) => {
     const data = JSON.parse(_data);
-    console.log(data);
 
-    if (data.score) {
-      const topicScores = last(topics).scores;
-      find(topicScores, { label: data.score }).score += 1;
+    switch (data.action) {
+      case 'add':
+        return add(data.name);
+      case 'vote':
+        return vote(data.score);
+      default:
+        return null;
     }
-
-    if (data.name) {
-      topics.push({ id, name: data.name, scores: cloneDeep(scores) });
-      id += 1;
-    }
-
-    wss.broadcast();
   });
 });
 
 server.on('request', app);
 server.listen(8080, () => console.log('Listening on http://localhost:8080'));
-
-wss.broadcast = () => {
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(topics));
-    }
-  });
-};
