@@ -16,6 +16,7 @@ const PATHS = {
 const common = {
   entry: {
     dashboard: path.join(PATHS.scripts, 'dashboard.jsx'),
+    index: path.join(PATHS.scripts, 'index.jsx'),
     vote: path.join(PATHS.scripts, 'vote.jsx'),
     styles: path.join(PATHS.styles, 'global.scss'),
   },

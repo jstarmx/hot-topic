@@ -66,7 +66,8 @@ wss.broadcast = (message) => {
 };
 
 wss.on('connection', (ws) => {
-  fetch();
+  // fetch();
+  console.log(ws);
 
   ws.on('message', (_data) => {
     const data = JSON.parse(_data);
