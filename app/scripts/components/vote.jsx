@@ -4,8 +4,11 @@ import { last } from 'lodash';
 
 import VoteButton from './vote_button';
 
+if (!cookie.load('votedOn')) cookie.save('votedOn', {}, { path: '/' });
+
 const Vote = React.createClass({
   propTypes: {
+    room: PropTypes.string.isRequired,
     socket: PropTypes.shape().isRequired,
   },
 
@@ -13,35 +16,49 @@ const Vote = React.createClass({
     return {
       id: null,
       topic: '',
-      votedOn: cookie.load('votedOn') || [],
+      votedOn: cookie.load('votedOn')[this.props.room] || [],
     };
   },
 
   componentDidMount() {
-    this.props.socket.onmessage = (event) => {
-      const { id, topic } = last(JSON.parse(event.data));
-      this.setState({ id, topic });
-    };
+    this.props.socket.on('update', (event) => {
+      if (event.length) {
+        const { id, topic } = last(event);
+        this.setState({ id, topic });
+      } else {
+        this.setState({ id: null, topic: '' });
+      }
+    });
   },
 
   send(score) {
-    this.props.socket.send(JSON.stringify({ action: 'vote', score }));
-    this.setState({ votedOn: [...this.state.votedOn, this.state.id] });
-    cookie.save('votedOn', [...this.state.votedOn, this.state.id], { path: '/' });
+    this.props.socket.emit('vote', score);
+    const votedOn = [...this.state.votedOn, this.state.id];
+    this.setState({ votedOn });
+    cookie.save('votedOn', {
+      ...cookie.load('votedOn'),
+      [this.props.room]: votedOn,
+    });
   },
 
   render() {
     return (
       <div className="container">
-        <h1 className="display-4">{this.state.topic}</h1>
-        {this.state.votedOn.includes(this.state.id) ?
-          <img src="check.svg" alt="voted!" className="vote__tick" />
-        :
-          <div className="scores">
-            <VoteButton send={this.send} color="red" />
-            <VoteButton send={this.send} color="amber" />
-            <VoteButton send={this.send} color="green" />
+        {this.state.id ?
+          <div>
+            <h1 className="display-4">{this.state.topic}</h1>
+            {this.state.votedOn.includes(this.state.id) ?
+              <img src="/check.svg" alt="voted!" className="vote__tick" />
+            :
+              <div className="scores">
+                <VoteButton send={this.send} color="red" />
+                <VoteButton send={this.send} color="amber" />
+                <VoteButton send={this.send} color="green" />
+              </div>
+            }
           </div>
+        :
+          <p>Waiting for something to vote on!</p>
         }
       </div>
     );

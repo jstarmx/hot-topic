@@ -1,11 +1,10 @@
 /* eslint-disable no-console */
-
 const express = require('express');
+const http = require('http');
 const path = require('path');
 const Pool = require('pg').Pool;
-const server = require('http').createServer();
+const socket = require('socket.io');
 const url = require('url');
-const WebSocket = require('ws');
 
 let config = {};
 
@@ -23,66 +22,66 @@ if (process.env.DATABASE_URL) {
 }
 
 const pool = new Pool(config);
-const wss = new WebSocket.Server({ server });
 const app = express();
+const server = http.createServer(app);
+const io = socket(server);
 
 app.set('port', (process.env.PORT || 8080));
+app.set('views', path.join(__dirname, '/app/views'));
+app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, '/public')));
 
 const error = err => console.log('error running query', err);
 
-const fetch = () =>
-  pool.query('SELECT * FROM session2')
-    .then(res => wss.broadcast(res.rows))
+const fetch = room =>
+  pool.query(`SELECT * FROM ${room}`)
+    .then(res => io.to(room).emit('update', res.rows))
     .catch(err => error(err));
 
-const update = query =>
+const update = (query, room) =>
   pool.query(query)
-    .then(() => fetch())
+    .then(() => fetch(room))
     .catch(err => error(err));
 
-const add = name =>
-  update(`INSERT INTO session2(topic, red, amber, green) VALUES ('${name}', 0, 0, 0)`);
+const add = (room, topic) =>
+  update(`INSERT INTO ${room}(topic, red, amber, green) VALUES ('${topic}', 0, 0, 0)`, room);
 
-const current = () =>
-  pool.query('SELECT * FROM session2 ORDER BY id DESC LIMIT 1')
+const remove = (room, id) =>
+  update(`DELETE FROM ${room} WHERE id = ${id}`, room);
+
+const current = room =>
+  pool.query(`SELECT * FROM ${room} ORDER BY id DESC LIMIT 1`)
     .catch(err => error(err));
 
-const vote = score =>
-  current()
+const vote = (room, score) =>
+  current(room)
     .then((res) => {
       const latest = res.rows[0].id;
-      const query = `UPDATE session2 SET ${score} = ${score} + 1 WHERE id = ${latest}`;
-      update(query);
+      const query = `UPDATE ${room} SET ${score} = ${score} + 1 WHERE id = ${latest}`;
+      update(query, room);
     })
     .catch(err => error(err));
 
-wss.broadcast = (message) => {
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(message));
-    }
-  });
-};
+io.on('connection', (client) => {
+  const room = client.handshake.query.room;
+  client.join(room);
+  fetch(room);
 
-wss.on('connection', (ws) => {
-  fetch();
-
-  ws.on('message', (_data) => {
-    const data = JSON.parse(_data);
-
-    switch (data.action) {
-      case 'add':
-        return add(data.name);
-      case 'vote':
-        return vote(data.score);
-      default:
-        return null;
-    }
-  });
+  client.on('add', topic => add(room, topic));
+  client.on('remove', id => remove(room, id));
+  client.on('vote', score => vote(room, score));
 });
 
-server.on('request', app);
 server.listen(app.get('port'), () => {
   console.log('Node app is running on port', app.get('port'));
 });
+
+app.get('/', (req, res) => res.render('pages/index'));
+
+app.get('/:id/dashboard', (req, res) =>
+  res.render('pages/dashboard', { id: req.params.id })
+);
+
+app.get('/:id/vote', (req, res) =>
+  res.render('pages/vote', { id: req.params.id })
+);

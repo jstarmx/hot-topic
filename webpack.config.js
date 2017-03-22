@@ -10,12 +10,12 @@ const PATHS = {
   images: path.resolve(__dirname, 'app', 'images'),
   scripts: path.resolve(__dirname, 'app', 'scripts'),
   styles: path.resolve(__dirname, 'app', 'styles'),
-  views: path.resolve(__dirname, 'app', 'views'),
 };
 
 const common = {
   entry: {
     dashboard: path.join(PATHS.scripts, 'dashboard.jsx'),
+    index: path.join(PATHS.scripts, 'index.jsx'),
     vote: path.join(PATHS.scripts, 'vote.jsx'),
     styles: path.join(PATHS.styles, 'global.scss'),
   },
@@ -47,10 +47,7 @@ const common = {
     ],
   },
   plugins: [
-    new CopyWebpackPlugin([
-      { from: PATHS.images, to: PATHS.output },
-      { from: PATHS.views, to: PATHS.output },
-    ]),
+    new CopyWebpackPlugin([{ from: PATHS.images, to: PATHS.output }]),
     new ExtractTextPlugin({ filename: 'style.css' }),
   ],
 };

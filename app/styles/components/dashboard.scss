@@ -25,6 +25,14 @@
     }
   }
 
+  &__btn {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    margin-right: 0.5em;
+    padding: 0;
+  }
+
   &__score {
     text-align: center;
 

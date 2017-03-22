@@ -4,6 +4,7 @@ import { max } from 'lodash';
 const Dashboard = React.createClass({
   propTypes: {
     add: PropTypes.func.isRequired,
+    remove: PropTypes.func.isRequired,
     topics: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   },
 
@@ -29,7 +30,7 @@ const Dashboard = React.createClass({
   },
 
   render() {
-    const { topics } = this.props;
+    const { topics, remove } = this.props;
 
     return (
       <div className="container">
@@ -58,7 +59,12 @@ const Dashboard = React.createClass({
 
               return (
                 <tr key={id}>
-                  <td>{topic}</td>
+                  <td>
+                    <button className="dashboard__btn" onClick={() => remove(id)}>
+                      <img src="/x.svg" alt="delete" className="dashboard__x" />
+                    </button>
+                    {topic}
+                  </td>
                   <td className={this.scoreClass(colors, red, 'red')}>{red}</td>
                   <td className={this.scoreClass(colors, amber, 'amber')}>{amber}</td>
                   <td className={this.scoreClass(colors, green, 'green')}>{green}</td>
