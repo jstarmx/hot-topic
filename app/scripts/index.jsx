@@ -8,9 +8,13 @@ const HOST = location.href.replace(/^http/, 'ws');
 const socket = Socket(HOST, { query: 'room=sessions' });
 const index = document.querySelector('.index');
 
+const create = () => socket.emit('create', id =>
+  location.replace(`${id}/dashboard`)
+);
+
 socket.on('update', event =>
   render(
-    <Index sessions={event} />,
+    <Index create={create} sessions={event} />,
     index
   )
 );

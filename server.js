@@ -43,6 +43,19 @@ const update = (query, room) =>
     .then(() => fetch(room))
     .catch(err => error(err));
 
+const newSession = id =>
+  pool.query(`CREATE TABLE session${id} (id SERIAL, topic TEXT, red INTEGER, amber INTEGER, green INTEGER)`)
+    .then(fetch('sessions'))
+    .then(() => id);
+
+const getId = () =>
+  pool.query('SELECT id FROM sessions ORDER BY id DESC LIMIT 1')
+    .then(res => newSession(res.rows[0].id));
+
+const create = () =>
+  pool.query("INSERT INTO sessions(title) VALUES ('untitled')")
+    .then(getId);
+
 const add = (room, topic) =>
   update(`INSERT INTO ${room}(topic, red, amber, green) VALUES ('${topic}', 0, 0, 0)`, room);
 
@@ -67,6 +80,7 @@ io.on('connection', (client) => {
   client.join(room);
   fetch(room);
 
+  client.on('create', cb => create().then(id => cb(id)));
   client.on('add', topic => add(room, topic));
   client.on('remove', id => remove(room, id));
   client.on('vote', score => vote(room, score));

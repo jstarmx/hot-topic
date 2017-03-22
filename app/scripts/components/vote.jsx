@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import cookie from 'react-cookie';
 import { last } from 'lodash';
 
+import Check from './icons/check';
 import VoteButton from './vote_button';
 
 if (!cookie.load('votedOn')) cookie.save('votedOn', {}, { path: '/' });
@@ -48,7 +49,7 @@ const Vote = React.createClass({
           <div>
             <h1 className="display-4">{this.state.topic}</h1>
             {this.state.votedOn.includes(this.state.id) ?
-              <img src="/check.svg" alt="voted!" className="vote__tick" />
+              <Check className="vote__tick" />
             :
               <div className="scores">
                 <VoteButton send={this.send} color="red" />

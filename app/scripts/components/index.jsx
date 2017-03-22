@@ -1,10 +1,15 @@
 import React, { PropTypes } from 'react';
 
-const Index = ({ sessions }) => (
+import Zap from './icons/zap';
+
+const Index = ({ create, sessions }) => (
   <div className="container">
     <h1 className="display-4">
       Hot Topic!
     </h1>
+    <button className="btn btn-primary btn-lg btn-block" onClick={create}>
+      <Zap className="index__zap" /> Start a new session
+    </button>
     <table className="table">
       <thead>
         <tr>
@@ -23,6 +28,7 @@ const Index = ({ sessions }) => (
 );
 
 Index.propTypes = {
+  create: PropTypes.func.isRequired,
   sessions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
 };
 
