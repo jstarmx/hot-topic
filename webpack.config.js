@@ -10,7 +10,6 @@ const PATHS = {
   images: path.resolve(__dirname, 'app', 'images'),
   scripts: path.resolve(__dirname, 'app', 'scripts'),
   styles: path.resolve(__dirname, 'app', 'styles'),
-  views: path.resolve(__dirname, 'app', 'views'),
 };
 
 const common = {
@@ -48,10 +47,7 @@ const common = {
     ],
   },
   plugins: [
-    new CopyWebpackPlugin([
-      { from: PATHS.images, to: PATHS.output },
-      { from: PATHS.views, to: PATHS.output },
-    ]),
+    new CopyWebpackPlugin([{ from: PATHS.images, to: PATHS.output }]),
     new ExtractTextPlugin({ filename: 'style.css' }),
   ],
 };

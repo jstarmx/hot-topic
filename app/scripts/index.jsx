@@ -1,15 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
+import Socket from 'socket.io-client';
 
 import Index from './components/index';
 
-const HOST = location.origin.replace(/^http/, 'ws');
-const ws = new WebSocket(HOST);
-// const newSession = () => ws.send(JSON.stringify({ action: 'new' }));
+const HOST = location.href.replace(/^http/, 'ws');
+const socket = Socket(HOST, { query: 'room=sessions' });
 const index = document.querySelector('.index');
 
-ws.onmessage = event =>
+socket.on('update', event =>
   render(
-    <Index sessions={JSON.parse(event.data)} />,
+    <Index sessions={event} />,
     index
-  );
+  )
+);

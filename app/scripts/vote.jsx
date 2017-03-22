@@ -1,10 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
+import Socket from 'socket.io-client';
 
 import Vote from './components/vote';
 
-const HOST = location.origin.replace(/^http/, 'ws');
-const ws = new WebSocket(HOST);
 const vote = document.querySelector('.vote');
+const id = vote.getAttribute('data-id');
+const HOST = location.origin.replace(/^http/, 'ws');
+const socket = Socket(HOST, { query: `room=session${id}` });
 
-render(<Vote socket={ws} />, vote);
+render(<Vote socket={socket} room={`session${id}`} />, vote);

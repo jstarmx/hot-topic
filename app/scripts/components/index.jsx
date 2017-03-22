@@ -2,7 +2,9 @@ import React, { PropTypes } from 'react';
 
 const Index = ({ sessions }) => (
   <div className="container">
-    <h1 className="display-4">Hot Topic!</h1>
+    <h1 className="display-4">
+      Hot Topic!
+    </h1>
     <table className="table">
       <thead>
         <tr>
@@ -11,7 +13,9 @@ const Index = ({ sessions }) => (
       </thead>
       <tbody>
         {sessions.map(({ id, title }) =>
-          <td><a href={`/${id}`}>{title}</a></td>
+          <tr key={id}>
+            <td><a href={`/${id}/vote`}>{title}</a></td>
+          </tr>
         )}
       </tbody>
     </table>
