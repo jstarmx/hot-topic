@@ -4,4 +4,17 @@
     margin-right: 0.5em;
     transform: scale(2);
   }
+
+  &__row {
+    align-items: center;
+    display: flex;
+  }
+
+  &__buttons {
+    margin-left: auto;
+  }
+
+  &__btn {
+    margin-left: 0.5em;
+  }
 }

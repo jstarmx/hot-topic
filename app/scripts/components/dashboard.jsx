@@ -8,6 +8,7 @@ const Dashboard = React.createClass({
   propTypes: {
     add: PropTypes.func.isRequired,
     clients: PropTypes.number.isRequired,
+    destroy: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
     rename: PropTypes.func.isRequired,
     title: PropTypes.string,
@@ -73,7 +74,7 @@ const Dashboard = React.createClass({
               value={this.state.title}
             />
           </form>
-          <form onSubmit={this.add}>
+          <form onSubmit={this.add} className="bg-faded dashboard__add">
             <input
               className="form-control"
               type="text"
@@ -82,7 +83,7 @@ const Dashboard = React.createClass({
               value={this.state.newTopic}
             />
           </form>
-          <table className="table dashboard__table">
+          <table className="table">
             <thead>
               <tr>
                 <th>Topic</th>
@@ -111,6 +112,14 @@ const Dashboard = React.createClass({
               })}
             </tbody>
           </table>
+          <div className="dashboard__delete">
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => this.props.destroy(this.state.title)}
+            >
+              Delete this session
+            </button>
+          </div>
         </div>
       </div>
     );

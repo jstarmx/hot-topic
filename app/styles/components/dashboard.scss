@@ -4,8 +4,8 @@
     width: 100%;
   }
 
-  &__table {
-    margin-top: 2em;
+  &__add {
+    padding: 1em;
   }
 
   &__light {
@@ -77,5 +77,12 @@
         background-color: $state-success-bg;
       }
     }
+  }
+
+  &__delete {
+    border-top: 1px solid $gray-lighter;
+    margin-top: 4em;
+    padding: 1em 0;
+    text-align: right;
   }
 }

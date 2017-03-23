@@ -1,4 +1,3 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const path = require('path');
@@ -47,7 +46,6 @@ const common = {
     ],
   },
   plugins: [
-    new CopyWebpackPlugin([{ from: PATHS.images, to: PATHS.output }]),
     new ExtractTextPlugin({ filename: 'style.css' }),
   ],
 };

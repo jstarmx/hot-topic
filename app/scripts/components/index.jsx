@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
 
-import X from './icons/x';
 import Zap from './icons/zap';
 
-const Index = ({ create, destroy, sessions }) => (
+const Index = ({ create, sessions }) => (
   <div className="container">
     <h1 className="display-4">
       Hot Topic!
@@ -20,14 +19,22 @@ const Index = ({ create, destroy, sessions }) => (
       <tbody>
         {sessions.map(({ id, title }) =>
           <tr key={id}>
-            <td>
-              <button
-                className="dashboard__btn"
-                onClick={() => destroy(id, title)}
-              >
-                <X className="dashboard__x" />
-              </button>
-              <a href={`/${id}/vote`}>{title || '[untitled session]'}</a>
+            <td className="index__row">
+              {title || '[untitled session]'}
+              <div className="index__buttons">
+                <a
+                  href={`/${id}/vote`}
+                  className="btn btn-primary index__btn"
+                >
+                  Vote
+                </a>
+                <a
+                  href={`/${id}/dashboard`}
+                  className="btn btn-secondary index__btn"
+                >
+                  Manage
+                </a>
+              </div>
             </td>
           </tr>
         )}
@@ -38,7 +45,6 @@ const Index = ({ create, destroy, sessions }) => (
 
 Index.propTypes = {
   create: PropTypes.func.isRequired,
-  destroy: PropTypes.func.isRequired,
   sessions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
 };
 
