@@ -6,6 +6,7 @@
   &__home {
     fill: $gray-lighter;
     transform: scale(1.5);
+    vertical-align: text-bottom;
 
     .nav__link:hover & {
       fill: $blue;
