@@ -8,13 +8,26 @@
   &__row {
     align-items: center;
     display: flex;
+    flex-direction: column;
+
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+    }
   }
 
   &__buttons {
-    margin-left: auto;
+    display: flex;
+    margin-top: 1em;
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+      margin: 0 0 0 auto;
+      width: auto;
+    }
   }
 
   &__btn {
+    flex-grow: 1;
     margin-left: 0.5em;
   }
 }

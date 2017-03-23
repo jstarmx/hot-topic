@@ -38,7 +38,9 @@ const getTitle = id =>
     .then(res => res.rows[0].title);
 
 const fetch = (room, id) => {
-  const payload = { clients: io.sockets.adapter.rooms[room].length };
+  const clients = io.sockets.adapter.rooms[room];
+  const payload = {};
+  payload.clients = clients ? clients.length : 0;
 
   pool.query(`SELECT * FROM ${room}`)
     .then((res) => {
@@ -71,10 +73,12 @@ const create = () =>
     .then(getId);
 
 const destroy = id =>
-  update(`DELETE FROM sessions WHERE id = ${id}`, 'sessions');
+  update(`DELETE FROM sessions WHERE id = ${id}`, 'sessions')
+    .then(fetch('sessions'));
 
 const rename = (id, room, name) =>
-  update(`UPDATE sessions SET title = '${name}' WHERE id = ${id}`, room);
+  update(`UPDATE sessions SET title = '${name}' WHERE id = ${id}`, room)
+    .then(fetch('sessions'));
 
 const add = (room, topic) =>
   update(`INSERT INTO ${room}(topic, red, amber, green) VALUES ('${topic}', 0, 0, 0)`, room);
