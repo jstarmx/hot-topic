@@ -1,22 +1,39 @@
 import React, { PropTypes } from 'react';
 import { max } from 'lodash';
 
+import Home from './icons/home';
+import X from './icons/x';
+
 const Dashboard = React.createClass({
   propTypes: {
     add: PropTypes.func.isRequired,
+    clients: PropTypes.number.isRequired,
     remove: PropTypes.func.isRequired,
+    rename: PropTypes.func.isRequired,
+    title: PropTypes.string,
     topics: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   },
 
+  getDefaultProps() {
+    return { title: '' };
+  },
+
   getInitialState() {
-    return { newTopic: '' };
+    return { newTopic: '', title: this.props.title };
   },
 
-  change(e) {
-    this.setState({ newTopic: e.target.value });
+  change(e, key) {
+    this.setState({ [key]: e.target.value });
   },
 
-  submit(e) {
+  rename(e) {
+    e.preventDefault();
+    const input = e.target.querySelector('input');
+    if (input) input.blur();
+    this.props.rename(this.state.title);
+  },
+
+  add(e) {
     e.preventDefault();
     this.props.add(this.state.newTopic);
     this.setState({ newTopic: '' });
@@ -30,49 +47,71 @@ const Dashboard = React.createClass({
   },
 
   render() {
-    const { topics, remove } = this.props;
+    const { clients, topics, remove } = this.props;
 
     return (
-      <div className="container">
-        <h1 className="display-4">Health check</h1>
-        <form onSubmit={this.submit}>
-          <input
-            className="form-control"
-            type="text"
-            placeholder="Add topic..."
-            onChange={this.change}
-            value={this.state.newTopic}
-          />
-        </form>
-        <table className="table dashboard__table">
-          <thead>
-            <tr>
-              <th>Topic</th>
-              <th><span className="dashboard__light dashboard__light--red" /></th>
-              <th><span className="dashboard__light dashboard__light--amber" /></th>
-              <th><span className="dashboard__light dashboard__light--green" /></th>
-            </tr>
-          </thead>
-          <tbody>
-            {topics.map(({ id, topic, red, amber, green }) => {
-              const colors = [red, amber, green];
+      <div>
+        <div className="bg-inverse">
+          <div className="container">
+            <nav className="nav">
+              <a className="nav-link nav__link" href="/">
+                <Home className="nav__home" />
+              </a>
+              <span className="nav-link nav__info">
+                connected users: {clients - 1}
+              </span>
+            </nav>
+          </div>
+        </div>
+        <div className="container">
+          <form onSubmit={this.rename}>
+            <input
+              className="display-4 dashboard__heading"
+              placeholder="Enter a title..."
+              onChange={e => this.change(e, 'title')}
+              onBlur={this.rename}
+              value={this.state.title}
+            />
+          </form>
+          <form onSubmit={this.add}>
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Add topic..."
+              onChange={e => this.change(e, 'newTopic')}
+              value={this.state.newTopic}
+            />
+          </form>
+          <table className="table dashboard__table">
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th><span className="dashboard__light dashboard__light--red" /></th>
+                <th><span className="dashboard__light dashboard__light--amber" /></th>
+                <th><span className="dashboard__light dashboard__light--green" /></th>
+              </tr>
+            </thead>
+            <tbody>
+              {topics.map(({ id, topic, red, amber, green }) => {
+                const colors = [red, amber, green];
 
-              return (
-                <tr key={id}>
-                  <td>
-                    <button className="dashboard__btn" onClick={() => remove(id)}>
-                      <img src="/x.svg" alt="delete" className="dashboard__x" />
-                    </button>
-                    {topic}
-                  </td>
-                  <td className={this.scoreClass(colors, red, 'red')}>{red}</td>
-                  <td className={this.scoreClass(colors, amber, 'amber')}>{amber}</td>
-                  <td className={this.scoreClass(colors, green, 'green')}>{green}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                return (
+                  <tr key={id}>
+                    <td>
+                      <button className="dashboard__btn" onClick={() => remove(id)}>
+                        <X className="dashboard__x" />
+                      </button>
+                      {topic}
+                    </td>
+                    <td className={this.scoreClass(colors, red, 'red')}>{red}</td>
+                    <td className={this.scoreClass(colors, amber, 'amber')}>{amber}</td>
+                    <td className={this.scoreClass(colors, green, 'green')}>{green}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   },

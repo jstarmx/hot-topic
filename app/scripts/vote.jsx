@@ -7,6 +7,6 @@ import Vote from './components/vote';
 const vote = document.querySelector('.vote');
 const id = vote.getAttribute('data-id');
 const HOST = location.origin.replace(/^http/, 'ws');
-const socket = Socket(HOST, { query: `room=session${id}` });
+const socket = Socket(HOST, { query: `id=${id}` });
 
 render(<Vote socket={socket} room={`session${id}`} />, vote);

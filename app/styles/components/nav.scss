@@ -1,0 +1,19 @@
+.nav {
+  &__link:hover {
+    background-color: $white;
+  }
+
+  &__home {
+    fill: $gray-lighter;
+    transform: scale(1.5);
+
+    .nav__link:hover & {
+      fill: $blue;
+    }
+  }
+
+  &__info {
+    color: $gray-lighter;
+    margin-left: auto;
+  }
+}

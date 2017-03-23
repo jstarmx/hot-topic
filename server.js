@@ -33,10 +33,24 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 const error = err => console.log('error running query', err);
 
-const fetch = room =>
+const getTitle = id =>
+  pool.query(`SELECT * FROM sessions WHERE id = ${id}`)
+    .then(res => res.rows[0].title);
+
+const fetch = (room, id) => {
+  const payload = { clients: io.sockets.adapter.rooms[room].length };
+
   pool.query(`SELECT * FROM ${room}`)
-    .then(res => io.to(room).emit('update', res.rows))
+    .then((res) => {
+      payload.data = res.rows;
+      return id ? getTitle(id) : Promise.resolve;
+    })
+    .then((title) => {
+      payload.title = title;
+      io.to(room).emit('update', payload);
+    })
     .catch(err => error(err));
+};
 
 const update = (query, room) =>
   pool.query(query)
@@ -49,12 +63,18 @@ const newSession = id =>
     .then(() => id);
 
 const getId = () =>
-  pool.query('SELECT id FROM sessions ORDER BY id DESC LIMIT 1')
+  pool.query('SELECT * FROM sessions ORDER BY id DESC LIMIT 1')
     .then(res => newSession(res.rows[0].id));
 
 const create = () =>
-  pool.query("INSERT INTO sessions(title) VALUES ('untitled')")
+  pool.query("INSERT INTO sessions(title) VALUES ('')")
     .then(getId);
+
+const destroy = id =>
+  update(`DELETE FROM sessions WHERE id = ${id}`, 'sessions');
+
+const rename = (id, room, name) =>
+  update(`UPDATE sessions SET title = '${name}' WHERE id = ${id}`, room);
 
 const add = (room, topic) =>
   update(`INSERT INTO ${room}(topic, red, amber, green) VALUES ('${topic}', 0, 0, 0)`, room);
@@ -76,14 +96,17 @@ const vote = (room, score) =>
     .catch(err => error(err));
 
 io.on('connection', (client) => {
-  const room = client.handshake.query.room;
-  client.join(room);
-  fetch(room);
+  const ID = client.handshake.query.id;
+  const ROOM = ID ? `session${ID}` : 'sessions';
+  client.join(ROOM);
+  fetch(ROOM, ID);
 
   client.on('create', cb => create().then(id => cb(id)));
-  client.on('add', topic => add(room, topic));
-  client.on('remove', id => remove(room, id));
-  client.on('vote', score => vote(room, score));
+  client.on('destroy', id => destroy(id));
+  client.on('rename', name => rename(ID, ROOM, name));
+  client.on('add', topic => add(ROOM, topic));
+  client.on('remove', id => remove(ROOM, id));
+  client.on('vote', score => vote(ROOM, score));
 });
 
 server.listen(app.get('port'), () => {

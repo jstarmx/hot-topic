@@ -3,6 +3,7 @@ import cookie from 'react-cookie';
 import { last } from 'lodash';
 
 import Check from './icons/check';
+import Home from './icons/home';
 import VoteButton from './vote_button';
 
 if (!cookie.load('votedOn')) cookie.save('votedOn', {}, { path: '/' });
@@ -16,6 +17,7 @@ const Vote = React.createClass({
   getInitialState() {
     return {
       id: null,
+      title: '',
       topic: '',
       votedOn: cookie.load('votedOn')[this.props.room] || [],
     };
@@ -23,8 +25,10 @@ const Vote = React.createClass({
 
   componentDidMount() {
     this.props.socket.on('update', (event) => {
-      if (event.length) {
-        const { id, topic } = last(event);
+      this.setState({ title: event.title });
+
+      if (event.data.length) {
+        const { id, topic } = last(event.data);
         this.setState({ id, topic });
       } else {
         this.setState({ id: null, topic: '' });
@@ -44,23 +48,37 @@ const Vote = React.createClass({
 
   render() {
     return (
-      <div className="container">
-        {this.state.id ?
-          <div>
-            <h1 className="display-4">{this.state.topic}</h1>
-            {this.state.votedOn.includes(this.state.id) ?
-              <Check className="vote__tick" />
-            :
-              <div className="scores">
-                <VoteButton send={this.send} color="red" />
-                <VoteButton send={this.send} color="amber" />
-                <VoteButton send={this.send} color="green" />
-              </div>
-            }
+      <div>
+        <div className="bg-inverse">
+          <div className="container">
+            <nav className="nav">
+              <a className="nav-link nav__link" href="/">
+                <Home className="nav__home" />
+              </a>
+              <span className="nav-link nav__info">
+                {this.state.title}
+              </span>
+            </nav>
           </div>
-        :
-          <p>Waiting for something to vote on!</p>
-        }
+        </div>
+        <div className="container">
+          {this.state.id ?
+            <div>
+              <h1 className="display-4">{this.state.topic}</h1>
+              {this.state.votedOn.includes(this.state.id) ?
+                <Check className="vote__tick" />
+              :
+                <div className="scores">
+                  <VoteButton send={this.send} color="red" />
+                  <VoteButton send={this.send} color="amber" />
+                  <VoteButton send={this.send} color="green" />
+                </div>
+              }
+            </div>
+          :
+            <p>Waiting for something to vote on!</p>
+          }
+        </div>
       </div>
     );
   },
