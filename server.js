@@ -10,7 +10,7 @@ const server = http.createServer(app);
 
 socket.open(server);
 
-app.set('port', (process.env.PORT || 8080));
+app.set('port', (process.env.PORT || 8000));
 app.set('views', path.join(__dirname, '/app/views'));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, '/public')));
