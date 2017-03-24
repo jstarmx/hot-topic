@@ -1,12 +1,13 @@
 {
   "name": "health-check",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "OTB health check app",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "rm -rf public && webpack -d -w --display-error-details",
     "lint": "eslint ./ --ext .js --ext .jsx && stylelint ./app/styles/**/*.scss",
+    "server": "node server.js",
     "test": "jest && yarn lint",
     "postinstall": "webpack -p"
   },
@@ -33,7 +34,7 @@
     "node-sass": "^4.5.0",
     "node-uuid": "^1.4.7",
     "path": "^0.12.7",
-    "pg": "^6.1.4",
+    "pg": "^6.1.5",
     "postcss-loader": "^1.3.3",
     "react": "^15.4.2",
     "react-cookie": "^1.0.5",
