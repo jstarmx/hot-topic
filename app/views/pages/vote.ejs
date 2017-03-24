@@ -5,6 +5,6 @@
   </head>
   <body>
     <div class="vote" data-id="<%= id %>"></div>
-    <script type="text/javascript" src="/vote.js"></script>
+    <%- include('../partials/footer.ejs', { script: 'vote' }) %>
   </body>
 </html>

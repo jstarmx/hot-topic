@@ -76,7 +76,7 @@ const Vote = React.createClass({
               }
             </div>
           :
-            <p>Waiting for something to vote on!</p>
+            <p className="mt-5">Waiting for something to vote on...</p>
           }
         </div>
       </div>
