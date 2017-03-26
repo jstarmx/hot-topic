@@ -37,7 +37,7 @@ const Vote = React.createClass({
   },
 
   send(score) {
-    this.props.socket.emit('vote', score);
+    this.props.socket.emit('vote', this.state.id, score);
     const votedOn = [...this.state.votedOn, this.state.id];
     this.setState({ votedOn });
     cookie.save('votedOn', {
@@ -56,7 +56,7 @@ const Vote = React.createClass({
                 <Home className="nav__home" />
               </a>
               <span className="nav-link nav__info">
-                {this.state.title}
+                {this.state.title.replace(/%27/g, "'")}
               </span>
             </nav>
           </div>
@@ -64,7 +64,9 @@ const Vote = React.createClass({
         <div className="container">
           {this.state.id ?
             <div>
-              <h1 className="display-4">{this.state.topic}</h1>
+              <h1 className="display-4">
+                {this.state.topic.replace(/%27/g, "'")}
+              </h1>
               {this.state.votedOn.includes(this.state.id) ?
                 <Check className="vote__tick" />
               :

@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { filter } from 'lodash';
 
 import Index from './components/index';
 import Socket from './modules/socket';
@@ -15,7 +16,7 @@ socket.on('update', event =>
   render(
     <Index
       create={create}
-      sessions={event.data}
+      sessions={filter(event.data, session => session.title)}
     />,
     index
   )

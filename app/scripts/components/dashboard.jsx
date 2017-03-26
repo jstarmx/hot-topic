@@ -31,12 +31,12 @@ const Dashboard = React.createClass({
     e.preventDefault();
     const input = e.target.querySelector('input');
     if (input) input.blur();
-    this.props.rename(this.state.title);
+    this.props.rename(this.state.title.replace(/'/g, '%27'));
   },
 
   add(e) {
     e.preventDefault();
-    this.props.add(this.state.newTopic);
+    this.props.add(this.state.newTopic.replace(/'/g, '%27'));
     this.setState({ newTopic: '' });
   },
 
@@ -71,7 +71,7 @@ const Dashboard = React.createClass({
               placeholder="Enter a title..."
               onChange={e => this.change(e, 'title')}
               onBlur={this.rename}
-              value={this.state.title}
+              value={this.state.title.replace(/%27/g, "'")}
             />
           </form>
           <form onSubmit={this.add} className="bg-faded dashboard__add">
@@ -102,7 +102,7 @@ const Dashboard = React.createClass({
                       <button className="dashboard__btn" onClick={() => remove(id)}>
                         <X className="dashboard__x" />
                       </button>
-                      {topic}
+                      {topic.replace(/%27/g, "'")}
                     </td>
                     <td className={this.scoreClass(colors, red, 'red')}>{red}</td>
                     <td className={this.scoreClass(colors, amber, 'amber')}>{amber}</td>

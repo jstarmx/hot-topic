@@ -6,6 +6,7 @@ An app for voting on stuff.
 ```
 git clone git@github.com:jstarmx/hot-topic.git
 cd hot-topic
+yarn install
 yarn server
 ```
 Navigate to [http://localhost:8000/](http://localhost:8000/)

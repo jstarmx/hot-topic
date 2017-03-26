@@ -20,7 +20,7 @@ const Index = ({ create, sessions }) => (
         {sessions.map(({ id, title }) =>
           <tr key={id}>
             <td className="index__row">
-              {title || '[untitled session]'}
+              {title.replace(/%27/g, "'")}
               <div className="index__buttons">
                 <a
                   href={`/${id}/vote`}
