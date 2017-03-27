@@ -4,6 +4,10 @@
   "description": "OTB health check app",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": "7.1.0",
+    "yarn": "0.21.3"
+  },
   "scripts": {
     "dev": "rm -rf public && webpack -d -w --display-error-details",
     "lint": "eslint ./ --ext .js --ext .jsx && stylelint ./app/styles/**/*.scss",
