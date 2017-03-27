@@ -48,34 +48,44 @@
   }
 
   &__score {
+    font-weight: 700;
+    position: relative;
     text-align: center;
-
-    &--max {
-      font-weight: 700;
-    }
 
     &--red {
       color: $state-danger-text;
-
-      &.dashboard__score--max {
-        background-color: $state-danger-bg;
-      }
     }
 
     &--amber {
       color: $state-warning-text;
-
-      &.dashboard__score--max {
-        background-color: $state-warning-bg;
-      }
     }
 
     &--green {
       color: $state-success-text;
+    }
+  }
 
-      &.dashboard__score--max {
-        background-color: $state-success-bg;
-      }
+  &__score-text {
+    position: relative;
+  }
+
+  &__score-bg {
+    bottom: 0;
+    content: "";
+    left: 0;
+    position: absolute;
+    width: 100%;
+
+    &--red {
+      background-color: $state-danger-bg;
+    }
+
+    &--amber {
+      background-color: $state-warning-bg;
+    }
+
+    &--green {
+      background-color: $state-success-bg;
     }
   }
 
