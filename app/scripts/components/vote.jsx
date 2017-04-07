@@ -1,12 +1,14 @@
 import React, { PropTypes } from 'react';
-import cookie from 'react-cookie';
 import { last } from 'lodash';
 
 import Check from './icons/check';
 import Home from './icons/home';
 import VoteButton from './vote_button';
 
-if (!cookie.load('votedOn')) cookie.save('votedOn', {}, { path: '/' });
+const getVotedOn = () => (JSON.parse(localStorage.getItem('votedOn')) || {});
+const setVotedOn = (votedOn) => {
+  localStorage.setItem('votedOn', JSON.stringify({ ...getVotedOn(), ...votedOn }));
+};
 
 const Vote = React.createClass({
   propTypes: {
@@ -19,34 +21,36 @@ const Vote = React.createClass({
       id: null,
       title: '',
       topic: '',
-      votedOn: cookie.load('votedOn')[this.props.room] || [],
+      votedOn: getVotedOn()[this.props.room] || [],
     };
   },
 
   componentDidMount() {
-    this.props.socket.on('update', (event) => {
-      this.setState({ title: event.title });
+    this.props.socket.on('update', this.update);
+  },
 
-      if (event.data.length) {
-        const { id, topic } = last(event.data);
-        this.setState({ id, topic });
-      } else {
-        this.setState({ id: null, topic: '' });
-      }
-    });
+  componentWillUnmount() {
+    this.props.socket.off('update', this.update);
+  },
+
+  update({ data, title }) {
+    const { id, topic } = last(data) || { id: null, topic: '' };
+    this.setState({ id, title, topic });
   },
 
   send(score) {
-    this.props.socket.emit('vote', this.state.id, score);
-    const votedOn = [...this.state.votedOn, this.state.id];
+    const { room, socket } = this.props;
+    const { id, votedOn: previousVotedOn } = this.state;
+    const votedOn = [...previousVotedOn, id];
+
+    socket.emit('vote', id, score);
     this.setState({ votedOn });
-    cookie.save('votedOn', {
-      ...cookie.load('votedOn'),
-      [this.props.room]: votedOn,
-    });
+    setVotedOn({ [room]: votedOn });
   },
 
   render() {
+    const { id, title, topic, votedOn } = this.state;
+
     return (
       <div>
         <div className="bg-inverse">
@@ -56,18 +60,18 @@ const Vote = React.createClass({
                 <Home className="nav__home" />
               </a>
               <span className="nav-link nav__info">
-                {this.state.title.replace(/%27/g, "'")}
+                {title.replace(/%27/g, "'")}
               </span>
             </nav>
           </div>
         </div>
         <div className="container">
-          {this.state.id ?
+          {id ?
             <div>
               <h1 className="display-4">
-                {this.state.topic.replace(/%27/g, "'")}
+                {topic.replace(/%27/g, "'")}
               </h1>
-              {this.state.votedOn.includes(this.state.id) ?
+              {votedOn.includes(id) ?
                 <Check className="vote__tick" />
               :
                 <div className="scores">
