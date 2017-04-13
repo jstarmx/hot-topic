@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
-import { max } from 'lodash';
 
 import Home from './icons/home';
-import X from './icons/x';
+import Topic from './topic';
 
 const Dashboard = React.createClass({
   propTypes: {
@@ -38,13 +37,6 @@ const Dashboard = React.createClass({
     e.preventDefault();
     this.props.add(this.state.newTopic.replace(/'/g, '%27'));
     this.setState({ newTopic: '' });
-  },
-
-  scoreClass(scores, score, colorName) {
-    const classList = `dashboard__score dashboard__score--${colorName}`;
-    const isMax = score === max(scores) && score > 0;
-
-    return isMax ? `${classList} dashboard__score--max` : classList;
   },
 
   render() {
@@ -93,23 +85,9 @@ const Dashboard = React.createClass({
               </tr>
             </thead>
             <tbody>
-              {topics.map(({ id, topic, red, amber, green }) => {
-                const colors = [red, amber, green];
-
-                return (
-                  <tr key={id}>
-                    <td>
-                      <button className="dashboard__btn" onClick={() => remove(id)}>
-                        <X className="dashboard__x" />
-                      </button>
-                      {topic.replace(/%27/g, "'")}
-                    </td>
-                    <td className={this.scoreClass(colors, red, 'red')}>{red}</td>
-                    <td className={this.scoreClass(colors, amber, 'amber')}>{amber}</td>
-                    <td className={this.scoreClass(colors, green, 'green')}>{green}</td>
-                  </tr>
-                );
-              })}
+              {topics.map(props =>
+                <Topic {...props} remove={remove} key={props.id} />
+              )}
             </tbody>
           </table>
           <div className="dashboard__delete">
