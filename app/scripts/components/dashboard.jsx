@@ -66,15 +66,6 @@ const Dashboard = React.createClass({
               value={this.state.title.replace(/%27/g, "'")}
             />
           </form>
-          <form onSubmit={this.add} className="bg-faded dashboard__add">
-            <input
-              className="form-control"
-              type="text"
-              placeholder="Add topic..."
-              onChange={e => this.change(e, 'newTopic')}
-              value={this.state.newTopic}
-            />
-          </form>
           <table className="table">
             <thead>
               <tr>
@@ -90,6 +81,15 @@ const Dashboard = React.createClass({
               )}
             </tbody>
           </table>
+          <form onSubmit={this.add} className="bg-faded dashboard__add">
+            <input
+              className="form-control"
+              type="text"
+              placeholder="Add topic..."
+              onChange={e => this.change(e, 'newTopic')}
+              value={this.state.newTopic}
+            />
+          </form>
           <div className="dashboard__delete">
             <button
               className="btn btn-outline-danger"
