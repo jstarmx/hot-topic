@@ -2,14 +2,16 @@ import React, { PropTypes } from 'react';
 
 import Zap from './icons/zap';
 
-const Index = ({ create, sessions }) => (
+const Index = ({ create, sessions, adminRights }) => (
   <div className="container">
     <h1 className="display-4">
       Hot Topic!
     </h1>
-    <button className="btn btn-primary btn-lg btn-block" onClick={create}>
-      <Zap className="index__zap" /> Start a new session
-    </button>
+    {adminRights &&
+      <button className="btn btn-primary btn-lg btn-block" onClick={create}>
+        <Zap className="index__zap" /> Start a new session
+      </button>
+    }
     <table className="table">
       <thead>
         <tr>
@@ -28,12 +30,14 @@ const Index = ({ create, sessions }) => (
                 >
                   Vote
                 </a>
-                <a
-                  href={`/${id}/dashboard`}
-                  className="btn btn-secondary index__btn"
-                >
-                  Manage
-                </a>
+                {adminRights &&
+                  <a
+                    href={`/${id}/dashboard`}
+                    className="btn btn-secondary index__btn"
+                  >
+                    Manage
+                  </a>
+                }
               </div>
             </td>
           </tr>
@@ -44,8 +48,14 @@ const Index = ({ create, sessions }) => (
 );
 
 Index.propTypes = {
-  create: PropTypes.func.isRequired,
+  adminRights: PropTypes.bool,
+  create: PropTypes.func,
   sessions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+};
+
+Index.defaultProps = {
+  adminRights: false,
+  create: () => {},
 };
 
 export default Index;

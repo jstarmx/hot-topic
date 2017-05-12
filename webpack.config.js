@@ -13,6 +13,7 @@ const PATHS = {
 
 const common = {
   entry: {
+    admin: path.join(PATHS.scripts, 'admin.jsx'),
     dashboard: path.join(PATHS.scripts, 'dashboard.jsx'),
     index: path.join(PATHS.scripts, 'index.jsx'),
     vote: path.join(PATHS.scripts, 'vote.jsx'),

@@ -18,6 +18,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 const data = { version: process.env.npm_package_version };
 
 app.get('/', (req, res) => res.render('pages/index', data));
+app.get('/admin', (req, res) => res.render('pages/admin', data));
 app.get('/:id/dashboard', (req, res) =>
   res.render('pages/dashboard', extend(data, { id: req.params.id }))
 );
