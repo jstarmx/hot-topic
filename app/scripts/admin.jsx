@@ -2,10 +2,10 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import createSocketIoMiddleware from 'redux-socket.io';
 import io from 'socket.io-client';
 
-import { fetchSessions } from './actions/sessions';
 import Index from './containers/index';
 import reducers from './reducers/index';
 
@@ -19,7 +19,7 @@ const devtools = window.__REDUX_DEVTOOLS_EXTENSION__ &&
 const store = createStore(
   reducers,
   devtools,
-  applyMiddleware(socketIoMiddleware)
+  applyMiddleware(thunk, socketIoMiddleware)
 );
 
 render(
@@ -28,7 +28,3 @@ render(
   </Provider>,
   admin
 );
-
-store.subscribe(() => console.log('new client state', store.getState()));
-store.dispatch({ type: 'server/fetch', data: 'Hello!' });
-

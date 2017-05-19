@@ -26,6 +26,6 @@
       "optionalDependencies": false,
       "peerDependencies": false
     }],
-    "react/prefer-es6-class": ["error", "never"]
+    "react/prefer-es6-class": ["warn", "always"]
   }
 }

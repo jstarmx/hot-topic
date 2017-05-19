@@ -5,6 +5,6 @@ const defaults = {
   year: 'numeric',
 };
 
-export const formattedDate = (date, options) => (
+exports.formattedDate = (date, options) => (
   new Date(date).toLocaleString(locale, { ...defaults, ...options })
-)
+);
