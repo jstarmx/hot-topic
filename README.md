@@ -8,6 +8,7 @@ An app for voting on stuff.
 ```
 git clone git@github.com:jstarmx/hot-topic.git
 cd hot-topic
+./script/db_setup
 yarn install
 yarn server
 ```
