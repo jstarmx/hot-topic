@@ -5,6 +5,7 @@ An app for voting on stuff.
 [https://otb-hot-topic.herokuapp.com](https://otb-hot-topic.herokuapp.com)
 
 ## Running locally
+Ensure that you have Postgres installed on your machine. Then run these commands:
 ```
 git clone git@github.com:jstarmx/hot-topic.git
 cd hot-topic
