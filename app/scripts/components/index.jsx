@@ -19,9 +19,12 @@ const Index = ({ create, sessions, adminRights }) => (
         </tr>
       </thead>
       <tbody>
-        {sessions.map(({ id, title }) =>
+        {sessions.map(({ id, title, created }) =>
           <tr key={id}>
             <td className="index__row">
+              <span className="index__date">
+                {Index.formattedDate(created)}
+              </span>
               {title.replace(/%27/g, "'")}
               <div className="index__buttons">
                 <a
@@ -46,6 +49,13 @@ const Index = ({ create, sessions, adminRights }) => (
     </table>
   </div>
 );
+
+Index.formattedDate = date => {
+  const unformattedDate = new Date(date);
+  const locale = "en-gb";
+  const formattedDate = unformattedDate.toLocaleString(locale, { month: "short", year: "numeric", day: "2-digit" });
+  return formattedDate;
+}
 
 Index.propTypes = {
   adminRights: PropTypes.bool,

@@ -2,4 +2,4 @@
 
 su postgres
 psql postgres -c "CREATE DATABASE otbhottopic WITH ENCODING 'UTF8'"
-psql -d otbhottopic -c "CREATE TABLE sessions (id SERIAL, title TEXT);"
+psql -d otbhottopic -c "CREATE TABLE sessions (id SERIAL, title TEXT, created DATE);"
