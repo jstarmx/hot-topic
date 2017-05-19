@@ -5,13 +5,7 @@ import {
   DESTROY_SESSION,
 } from '../actions/sessions';
 
-export default (state = [
-  {
-    id: 1,
-    title: 'lorem',
-    topics: [],
-  },
-], { type, payload }) => {
+export default (state = [], { type, payload }) => {
   switch (type) {
     case CREATE_SESSION:
       return [...state, {

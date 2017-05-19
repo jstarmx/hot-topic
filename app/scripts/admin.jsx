@@ -1,20 +1,25 @@
 import React from 'react';
 import { render } from 'react-dom';
-// import { filter } from 'lodash';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import createSocketIoMiddleware from 'redux-socket.io';
+import io from 'socket.io-client';
 
+import { fetchSessions } from './actions/sessions';
 import Index from './containers/index';
 import reducers from './reducers/index';
-// import Socket from './modules/socket';
+
+const socket = io(location.origin.replace(/^http/, 'ws'));
+const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
 
 const admin = document.querySelector('.admin');
-const devtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
-// const socket = Socket.open();
+const devtools = window.__REDUX_DEVTOOLS_EXTENSION__ &&
+  window.__REDUX_DEVTOOLS_EXTENSION__();
 
 const store = createStore(
   reducers,
-  devtools
+  devtools,
+  applyMiddleware(socketIoMiddleware)
 );
 
 render(
@@ -24,20 +29,6 @@ render(
   admin
 );
 
-/*
-const create = () => socket.emit('create', id =>
-  location.replace(`${id}/dashboard`)
-);
-*/
+store.subscribe(() => console.log('new client state', store.getState()));
+store.dispatch({ type: 'server/fetch', data: 'Hello!' });
 
-/*
-socket.on('update', event =>
-  render(
-    <Index
-      create={create}
-      sessions={filter(event.data, session => session.title)}
-    />,
-    index
-  )
-);
-*/
