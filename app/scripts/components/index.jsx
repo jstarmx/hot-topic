@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { formattedDate } from '../helpers/date';
 
 import Zap from './icons/zap';
 
@@ -19,9 +20,12 @@ const Index = ({ create, sessions, adminRights }) => (
         </tr>
       </thead>
       <tbody>
-        {sessions.map(({ id, title }) =>
+        {sessions.map(({ id, title, created }) =>
           <tr key={id}>
             <td className="index__row">
+              <span className="index__date">
+                {formattedDate(created)}
+              </span>
               {title.replace(/%27/g, "'")}
               <div className="index__buttons">
                 <a
