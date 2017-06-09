@@ -28,7 +28,7 @@ class Index extends Component {
             </tr>
           </thead>
           <tbody>
-            {sessions.map(({ id, title, created }) =>
+            {sessions.map(({ id, title, created }) => (
               <tr key={id}>
                 <td className="index__row">
                   <button
@@ -42,24 +42,25 @@ class Index extends Component {
                   </span>
                   {title.replace(/%27/g, "'")}
                   <div className="index__buttons">
-                    <a
-                      href={`/${id}/vote`}
-                      className="btn btn-primary index__btn"
-                    >
-                      Vote
-                    </a>
-                    {adminRights &&
+                    {adminRights ?
                       <a
                         href={`/${id}/dashboard`}
                         className="btn btn-secondary index__btn"
                       >
                         Manage
                       </a>
+                    :
+                      <a
+                        href={`/${id}/vote`}
+                        className="btn btn-primary index__btn"
+                      >
+                        Vote
+                      </a>
                     }
                   </div>
                 </td>
               </tr>
-            )}
+            )) }
           </tbody>
         </table>
       </div>
