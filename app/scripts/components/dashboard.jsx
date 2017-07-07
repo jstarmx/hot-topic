@@ -1,46 +1,51 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { bindAll } from 'lodash';
 
 import Home from './icons/home';
 import Topic from './topic';
 
-const Dashboard = React.createClass({
-  propTypes: {
-    add: PropTypes.func.isRequired,
-    clients: PropTypes.number.isRequired,
-    destroy: PropTypes.func.isRequired,
-    remove: PropTypes.func.isRequired,
-    rename: PropTypes.func.isRequired,
-    title: PropTypes.string,
-    topics: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  },
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      newTopic: '',
+      title: props.title,
+    };
+    bindAll(this, 'add', 'remove');
+  }
 
-  getDefaultProps() {
-    return { title: '' };
-  },
-
-  getInitialState() {
-    return { newTopic: '', title: this.props.title };
-  },
+  componentDidMount() {
+    this.props.fetchSession(this.props.id);
+  }
 
   change(e, key) {
     this.setState({ [key]: e.target.value });
-  },
+  }
 
-  rename(e) {
-    e.preventDefault();
-    const input = e.target.querySelector('input');
-    if (input) input.blur();
-    this.props.rename(this.state.title.replace(/'/g, '%27'));
-  },
+  // rename(e) {
+  //   e.preventDefault();
+  //   const input = e.target.querySelector('input');
+  //   if (input) input.blur();
+  //   this.props.rename(this.state.title.replace(/'/g, '%27'));
+  // },
 
   add(e) {
     e.preventDefault();
-    this.props.add(this.state.newTopic.replace(/'/g, '%27'));
+    const { addTopic, room } = this.props;
+    addTopic({
+      room,
+      title: this.state.newTopic.replace(/'/g, '%27'),
+    });
     this.setState({ newTopic: '' });
-  },
+  }
+
+  remove(id) {
+    const { removeTopic, room } = this.props;
+    removeTopic({ id, room });
+  }
 
   render() {
-    const { clients, topics, remove } = this.props;
+    const { clients, topics, destroy, title } = this.props;
 
     return (
       <div>
@@ -63,7 +68,7 @@ const Dashboard = React.createClass({
               placeholder="Enter a title..."
               onChange={e => this.change(e, 'title')}
               onBlur={this.rename}
-              value={this.state.title.replace(/%27/g, "'")}
+              value={title.replace(/%27/g, "'")}
             />
           </form>
           <table className="table">
@@ -77,7 +82,7 @@ const Dashboard = React.createClass({
             </thead>
             <tbody>
               {topics.map(props =>
-                <Topic {...props} remove={remove} key={props.id} />
+                <Topic {...props} remove={this.remove} key={props.id} />
               )}
             </tbody>
           </table>
@@ -93,7 +98,7 @@ const Dashboard = React.createClass({
           <div className="dashboard__delete">
             <button
               className="btn btn-outline-danger"
-              onClick={() => this.props.destroy(this.state.title)}
+              onClick={() => destroy(this.state.title)}
             >
               Delete this session
             </button>
@@ -101,7 +106,24 @@ const Dashboard = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
+
+Dashboard.defaultProps = {
+  clients: 1,
+  destroy: () => {},
+};
+
+Dashboard.propTypes = {
+  clients: PropTypes.number,
+  destroy: PropTypes.func,
+  addTopic: PropTypes.func.isRequired,
+  removeTopic: PropTypes.func.isRequired,
+  room: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  fetchSession: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  topics: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+};
 
 export default Dashboard;

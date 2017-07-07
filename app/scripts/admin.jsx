@@ -7,7 +7,7 @@ import store from './store/';
 const admin = document.querySelector('.admin');
 
 render(
-  <Provider store={store}>
+  <Provider store={store()}>
     <Index adminRights />
   </Provider>,
   admin
