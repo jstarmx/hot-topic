@@ -9,25 +9,35 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       newTopic: '',
-      title: props.title,
+      title: '',
     };
-    bindAll(this, 'add', 'remove');
+    bindAll(this, 'add', 'remove', 'destroy', 'rename');
   }
 
   componentDidMount() {
     this.props.fetchSession(this.props.id);
   }
 
+  componentWillReceiveProps({ title }) {
+    this.setState({ title });
+  }
+
   change(e, key) {
     this.setState({ [key]: e.target.value });
   }
 
-  // rename(e) {
-  //   e.preventDefault();
-  //   const input = e.target.querySelector('input');
-  //   if (input) input.blur();
-  //   this.props.rename(this.state.title.replace(/'/g, '%27'));
-  // },
+  rename(e) {
+    e.preventDefault();
+    const { renameSession, id, room } = this.props;
+    const input = e.target.querySelector('input');
+    if (input) input.blur();
+
+    renameSession({
+      name: this.state.title.replace(/'/g, '%27'),
+      id,
+      room,
+    });
+  }
 
   add(e) {
     e.preventDefault();
@@ -44,16 +54,30 @@ class Dashboard extends Component {
     removeTopic({ id, room });
   }
 
+  destroy() {
+    const confirm = window.confirm( // eslint-disable-line no-alert
+      `Are you sure you want to delete ${this.state.title}? This cannot be undone.`
+    );
+    if (confirm) {
+      this.props.destroySession(this.props.id);
+      location.replace('/admin');
+    }
+  }
+
   render() {
-    const { clients, topics, destroy, title } = this.props;
+    const { clients, topics } = this.props;
+    const { title } = this.state;
 
     return (
       <div>
         <div className="bg-inverse">
           <div className="container">
-            <nav className="nav">
+            <nav className="nav nav-inverse">
               <a className="nav-link nav__link" href="/">
                 <Home className="nav__home" />
+              </a>
+              <a className="nav-link nav__link" href="/admin">
+                Admin
               </a>
               <span className="nav-link nav__info">
                 connected users: {clients - 1}
@@ -98,7 +122,7 @@ class Dashboard extends Component {
           <div className="dashboard__delete">
             <button
               className="btn btn-outline-danger"
-              onClick={() => destroy(this.state.title)}
+              onClick={this.destroy}
             >
               Delete this session
             </button>
@@ -109,16 +133,12 @@ class Dashboard extends Component {
   }
 }
 
-Dashboard.defaultProps = {
-  clients: 1,
-  destroy: () => {},
-};
-
 Dashboard.propTypes = {
-  clients: PropTypes.number,
-  destroy: PropTypes.func,
+  clients: PropTypes.number.isRequired,
+  destroySession: PropTypes.func.isRequired,
   addTopic: PropTypes.func.isRequired,
   removeTopic: PropTypes.func.isRequired,
+  renameSession: PropTypes.func.isRequired,
   room: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   fetchSession: PropTypes.func.isRequired,

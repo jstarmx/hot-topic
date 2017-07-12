@@ -1,16 +1,17 @@
 .nav {
-  &__link:hover {
-    background-color: $white;
+  &__link {
+    color: $white;
+
+    &:hover {
+      background-color: $white;
+      color: $blue;
+    }
   }
 
   &__home {
-    fill: $gray-lighter;
+    fill: currentColor;
     transform: scale(1.5);
     vertical-align: text-bottom;
-
-    .nav__link:hover & {
-      fill: $blue;
-    }
   }
 
   &__info {

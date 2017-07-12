@@ -2,6 +2,7 @@ export const CREATE_SESSION = 'server/CREATE_SESSION';
 export const DESTROY_SESSION = 'server/DESTROY_SESSION';
 export const FETCH_SESSIONS = 'server/FETCH_SESSIONS';
 export const FETCH_SESSION = 'server/FETCH_SESSION';
+export const RENAME_SESSION = 'server/RENAME_SESSION';
 export const SESSIONS_RECEIVED = 'SESSIONS_RECEIVED';
 export const SESSION_RECEIVED = 'SESSION_RECEIVED';
 export const ADD_TOPIC = 'server/ADD_TOPIC';
@@ -28,6 +29,12 @@ export const fetchSession = id => dispatch =>
   dispatch({
     type: FETCH_SESSION,
     data: id,
+  });
+
+export const renameSession = data => dispatch =>
+  dispatch({
+    type: RENAME_SESSION,
+    data,
   });
 
 export const addTopic = data => dispatch =>
