@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const Check = ({ className }) => (
   <svg className={className} width="12" height="16" viewBox="0 0 12 16" xmlns="http://www.w3.org/2000/svg">

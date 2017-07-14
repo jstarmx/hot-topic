@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const Zap = ({ className }) => (
   <svg className={className} width="10" height="16" viewBox="0 0 10 16" xmlns="http://www.w3.org/2000/svg">
