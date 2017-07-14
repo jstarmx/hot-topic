@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types';
 /* eslint-disable max-len */
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 const Home = ({ className }) => (
   <svg className={className} width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">

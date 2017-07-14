@@ -2,6 +2,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const merge = require('webpack-merge');
 const path = require('path');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const webpack = require('webpack');
 const WebpackNotifierPlugin = require('webpack-notifier');
 
 const PATHS = {
@@ -48,6 +49,16 @@ const common = {
   },
   plugins: [
     new ExtractTextPlugin({ filename: 'style.css' }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks(module) {
+        return module.context && module.context.indexOf('node_modules') !== -1;
+      },
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity,
+    }),
   ],
 };
 
