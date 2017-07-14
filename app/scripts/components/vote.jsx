@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import { last } from 'lodash';
+import React, { Component, PropTypes } from 'react';
+import { bindAll } from 'lodash';
 
 import Check from './icons/check';
 import Home from './icons/home';
@@ -10,46 +10,35 @@ const setVotedOn = (votedOn) => {
   localStorage.setItem('votedOn', JSON.stringify({ ...getVotedOn(), ...votedOn }));
 };
 
-const Vote = React.createClass({
-  propTypes: {
-    room: PropTypes.string.isRequired,
-    socket: PropTypes.shape().isRequired,
-  },
-
-  getInitialState() {
-    return {
-      id: null,
-      title: '',
-      topic: '',
-      votedOn: getVotedOn()[this.props.room] || [],
-    };
-  },
+class Vote extends Component {
+  constructor() {
+    super();
+    this.state = { votedOn: [] };
+    bindAll(this, 'send');
+  }
 
   componentDidMount() {
-    this.props.socket.on('update', this.update);
-  },
+    this.props.fetchSession(this.props.id);
+  }
 
-  componentWillUnmount() {
-    this.props.socket.off('update', this.update);
-  },
-
-  update({ data, title }) {
-    const { id, topic } = last(data) || { id: null, topic: '' };
-    this.setState({ id, title, topic });
-  },
+  currentTopic() {
+    return this.props.topics[0] || { id: null, topic: '' };
+  }
 
   send(score) {
-    const { room, socket } = this.props;
-    const { id, votedOn: previousVotedOn } = this.state;
+    const { room, vote } = this.props;
+    const { id } = this.currentTopic();
+    const { votedOn: previousVotedOn } = this.state;
     const votedOn = [...previousVotedOn, id];
 
-    socket.emit('vote', id, score);
+    vote({ room, id, score });
     this.setState({ votedOn });
     setVotedOn({ [room]: votedOn });
-  },
+  }
 
   render() {
-    const { id, title, topic, votedOn } = this.state;
+    const { title, votedOn } = this.props;
+    const { id, topic } = this.currentTopic();
 
     return (
       <div>
@@ -71,7 +60,7 @@ const Vote = React.createClass({
               <h1 className="display-4">
                 {topic.replace(/%27/g, "'")}
               </h1>
-              {votedOn.includes(id) ?
+              {votedOn ?
                 <Check className="vote__tick" />
               :
                 <div className="scores">
@@ -87,7 +76,17 @@ const Vote = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
+
+Vote.propTypes = {
+  fetchSession: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  room: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  topics: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  vote: PropTypes.func.isRequired,
+  votedOn: PropTypes.bool.isRequired,
+};
 
 export default Vote;

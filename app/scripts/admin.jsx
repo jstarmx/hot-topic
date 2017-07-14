@@ -1,24 +1,14 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { filter } from 'lodash';
-
-import Index from './components/index';
-import Socket from './modules/socket';
+import { Provider } from 'react-redux';
+import Index from './containers/index';
+import store from './store/';
 
 const admin = document.querySelector('.admin');
-const socket = Socket.open();
 
-const create = () => socket.emit('create', id =>
-  location.replace(`${id}/dashboard`)
-);
-
-socket.on('update', event =>
-  render(
-    <Index
-      create={create}
-      sessions={filter(event.data, session => session.title)}
-      adminRights
-    />,
-    admin
-  )
+render(
+  <Provider store={store()}>
+    <Index adminRights />
+  </Provider>,
+  admin
 );

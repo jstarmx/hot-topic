@@ -1,54 +1,83 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { bindAll } from 'lodash';
 
 import Home from './icons/home';
 import Topic from './topic';
 
-const Dashboard = React.createClass({
-  propTypes: {
-    add: PropTypes.func.isRequired,
-    clients: PropTypes.number.isRequired,
-    destroy: PropTypes.func.isRequired,
-    remove: PropTypes.func.isRequired,
-    rename: PropTypes.func.isRequired,
-    title: PropTypes.string,
-    topics: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  },
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      newTopic: '',
+      title: '',
+    };
+    bindAll(this, 'add', 'remove', 'destroy', 'rename');
+  }
 
-  getDefaultProps() {
-    return { title: '' };
-  },
+  componentDidMount() {
+    this.props.fetchSession(this.props.id);
+  }
 
-  getInitialState() {
-    return { newTopic: '', title: this.props.title };
-  },
+  componentWillReceiveProps({ title }) {
+    this.setState({ title });
+  }
 
   change(e, key) {
     this.setState({ [key]: e.target.value });
-  },
+  }
 
   rename(e) {
     e.preventDefault();
+    const { renameSession, id, room } = this.props;
     const input = e.target.querySelector('input');
     if (input) input.blur();
-    this.props.rename(this.state.title.replace(/'/g, '%27'));
-  },
+
+    renameSession({
+      name: this.state.title.replace(/'/g, '%27'),
+      id,
+      room,
+    });
+  }
 
   add(e) {
     e.preventDefault();
-    this.props.add(this.state.newTopic.replace(/'/g, '%27'));
+    const { addTopic, room } = this.props;
+    addTopic({
+      room,
+      title: this.state.newTopic.replace(/'/g, '%27'),
+    });
     this.setState({ newTopic: '' });
-  },
+  }
+
+  remove(id) {
+    const { removeTopic, room } = this.props;
+    removeTopic({ id, room });
+  }
+
+  destroy() {
+    const confirm = window.confirm( // eslint-disable-line no-alert
+      `Are you sure you want to delete ${this.state.title}? This cannot be undone.`
+    );
+    if (confirm) {
+      this.props.destroySession(this.props.id);
+      location.replace('/admin');
+    }
+  }
 
   render() {
-    const { clients, topics, remove } = this.props;
+    const { clients, topics } = this.props;
+    const { title } = this.state;
 
     return (
       <div>
         <div className="bg-inverse">
           <div className="container">
-            <nav className="nav">
+            <nav className="nav nav-inverse">
               <a className="nav-link nav__link" href="/">
                 <Home className="nav__home" />
+              </a>
+              <a className="nav-link nav__link" href="/admin">
+                Admin
               </a>
               <span className="nav-link nav__info">
                 connected users: {clients - 1}
@@ -63,7 +92,8 @@ const Dashboard = React.createClass({
               placeholder="Enter a title..."
               onChange={e => this.change(e, 'title')}
               onBlur={this.rename}
-              value={this.state.title.replace(/%27/g, "'")}
+              onFocus={e => e.currentTarget.select()}
+              value={title.replace(/%27/g, "'")}
             />
           </form>
           <table className="table">
@@ -77,7 +107,7 @@ const Dashboard = React.createClass({
             </thead>
             <tbody>
               {topics.map(props =>
-                <Topic {...props} remove={remove} key={props.id} />
+                <Topic {...props} remove={this.remove} key={props.id} />
               )}
             </tbody>
           </table>
@@ -93,7 +123,7 @@ const Dashboard = React.createClass({
           <div className="dashboard__delete">
             <button
               className="btn btn-outline-danger"
-              onClick={() => this.props.destroy(this.state.title)}
+              onClick={this.destroy}
             >
               Delete this session
             </button>
@@ -101,7 +131,20 @@ const Dashboard = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
+
+Dashboard.propTypes = {
+  clients: PropTypes.number.isRequired,
+  destroySession: PropTypes.func.isRequired,
+  addTopic: PropTypes.func.isRequired,
+  removeTopic: PropTypes.func.isRequired,
+  renameSession: PropTypes.func.isRequired,
+  room: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  fetchSession: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  topics: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+};
 
 export default Dashboard;
