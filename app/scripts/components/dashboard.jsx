@@ -92,6 +92,7 @@ class Dashboard extends Component {
               placeholder="Enter a title..."
               onChange={e => this.change(e, 'title')}
               onBlur={this.rename}
+              onFocus={e => e.currentTarget.select()}
               value={title.replace(/%27/g, "'")}
             />
           </form>
