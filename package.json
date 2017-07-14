@@ -1,13 +1,11 @@
 {
-  "name": "health-check",
-  "version": "0.1.1",
-  "description": "OTB health check app",
+  "name": "hot-topic",
+  "version": "0.2.0",
+  "description": "An app for voting on stuff.",
   "main": "index.js",
   "license": "MIT",
   "engines": {
-    "node": "7.1.0",
-    "npm": "3.10.9",
-    "yarn": "0.21.3"
+    "node": "7.10.1"
   },
   "scripts": {
     "dev": "rm -rf public && webpack -d -w --display-error-details",

@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { bindAll } from 'lodash';
 
 import Check from './icons/check';
-import Home from './icons/home';
 import VoteButton from './vote_button';
+import Header from '../containers/header';
 
 const getVotedOn = () => (JSON.parse(localStorage.getItem('votedOn')) || {});
 const setVotedOn = (votedOn) => {
@@ -43,18 +43,7 @@ class Vote extends Component {
 
     return (
       <div>
-        <div className="bg-inverse">
-          <div className="container">
-            <nav className="nav">
-              <a className="nav-link nav__link" href="/">
-                <Home className="nav__home" />
-              </a>
-              <span className="nav-link nav__info">
-                {title.replace(/%27/g, "'")}
-              </span>
-            </nav>
-          </div>
-        </div>
+        <Header title={title} />
         <div className="container">
           {id ?
             <div>

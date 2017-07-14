@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindAll } from 'lodash';
 
-import Home from './icons/home';
 import Topic from './topic';
+import Header from '../containers/header';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -71,21 +71,7 @@ class Dashboard extends Component {
 
     return (
       <div>
-        <div className="bg-inverse">
-          <div className="container">
-            <nav className="nav nav-inverse">
-              <a className="nav-link nav__link" href="/">
-                <Home className="nav__home" />
-              </a>
-              <a className="nav-link nav__link" href="/admin">
-                Admin
-              </a>
-              <span className="nav-link nav__info">
-                connected users: {clients - 1}
-              </span>
-            </nav>
-          </div>
-        </div>
+        <Header clients={clients} />
         <div className="container">
           <form onSubmit={this.rename}>
             <input

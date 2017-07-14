@@ -8,6 +8,7 @@ export const SESSION_RECEIVED = 'SESSION_RECEIVED';
 export const ADD_TOPIC = 'server/ADD_TOPIC';
 export const REMOVE_TOPIC = 'server/REMOVE_TOPIC';
 export const VOTE = 'server/VOTE';
+export const ERROR = 'ERROR';
 
 export const createSession = () => dispatch =>
   dispatch({
