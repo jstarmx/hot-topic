@@ -1,11 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 
-import Socket from './modules/socket';
-import Vote from './components/vote';
+import Vote from './containers/vote';
+import store from './store/';
 
 const vote = document.querySelector('.vote');
 const id = vote.getAttribute('data-id');
-const socket = Socket.open(id);
 
-render(<Vote socket={socket} room={`session${id}`} />, vote);
+render(
+  <Provider store={store(id)}>
+    <Vote id={id} />
+  </Provider>,
+  vote
+);

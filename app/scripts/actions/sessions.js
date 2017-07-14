@@ -7,6 +7,7 @@ export const SESSIONS_RECEIVED = 'SESSIONS_RECEIVED';
 export const SESSION_RECEIVED = 'SESSION_RECEIVED';
 export const ADD_TOPIC = 'server/ADD_TOPIC';
 export const REMOVE_TOPIC = 'server/REMOVE_TOPIC';
+export const VOTE = 'server/VOTE';
 
 export const createSession = () => dispatch =>
   dispatch({
@@ -46,5 +47,11 @@ export const addTopic = data => dispatch =>
 export const removeTopic = data => dispatch =>
   dispatch({
     type: REMOVE_TOPIC,
+    data,
+  });
+
+export const vote = data => dispatch =>
+  dispatch({
+    type: VOTE,
     data,
   });
