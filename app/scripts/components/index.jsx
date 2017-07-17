@@ -62,7 +62,7 @@ class Index extends Component {
                           </a>}
                     </div>
                   </td>
-                </tr>,
+                </tr>
               )}
             </tbody>
           </table>

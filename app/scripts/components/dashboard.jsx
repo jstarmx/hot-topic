@@ -59,7 +59,7 @@ class Dashboard extends Component {
     // eslint-disable-next-line no-alert
     const confirm = window.confirm(
       `Are you sure you want to delete ${this.state
-        .title}? This cannot be undone.`,
+        .title}? This cannot be undone.`
     );
     if (confirm) {
       this.props.destroySession(this.props.id);
@@ -102,7 +102,7 @@ class Dashboard extends Component {
             </thead>
             <tbody>
               {topics.map(props =>
-                <Topic {...props} remove={this.remove} key={props.id} />,
+                <Topic {...props} remove={this.remove} key={props.id} />
               )}
             </tbody>
           </table>

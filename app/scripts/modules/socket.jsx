@@ -10,7 +10,7 @@ export default id => {
   const socket = Socket(HOST, config);
 
   socket.on('error', event =>
-    render(<Error message={event} />, document.querySelector('.error')),
+    render(<Error message={event} />, document.querySelector('.error'))
   );
 
   return socket;

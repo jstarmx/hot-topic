@@ -10,7 +10,7 @@ const getVotedOn = () => JSON.parse(localStorage.getItem('votedOn')) || {};
 const setVotedOn = votedOn => {
   localStorage.setItem(
     'votedOn',
-    JSON.stringify({ ...getVotedOn(), ...votedOn }),
+    JSON.stringify({ ...getVotedOn(), ...votedOn })
   );
 };
 

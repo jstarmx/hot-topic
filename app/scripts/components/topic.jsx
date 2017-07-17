@@ -23,7 +23,7 @@ const Topic = ({ id, topic, red, amber, green, remove }) => {
           <span className="dashboard__score-text">
             {score}
           </span>
-        </td>,
+        </td>
       )}
     </tr>
   );

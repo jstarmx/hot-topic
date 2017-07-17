@@ -10,5 +10,5 @@ render(
   <Provider store={store()}>
     <Index adminRights />
   </Provider>,
-  admin,
+  admin
 );

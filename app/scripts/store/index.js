@@ -13,6 +13,6 @@ export default id => {
 
   return createStore(
     reducers,
-    composeEnhancers(applyMiddleware(thunk, socketIoMiddleware)),
+    composeEnhancers(applyMiddleware(thunk, socketIoMiddleware))
   );
 };

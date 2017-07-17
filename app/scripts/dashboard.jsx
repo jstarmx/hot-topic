@@ -12,5 +12,5 @@ render(
   <Provider store={store(id)}>
     <Dashboard id={id} />
   </Provider>,
-  dashboard,
+  dashboard
 );

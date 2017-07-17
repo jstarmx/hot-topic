@@ -20,10 +20,10 @@ const data = { version: process.env.npm_package_version };
 app.get('/', (req, res) => res.render('pages/index', data));
 app.get('/admin', (req, res) => res.render('pages/admin', data));
 app.get('/:id/dashboard', (req, res) =>
-  res.render('pages/dashboard', extend(data, { id: req.params.id })),
+  res.render('pages/dashboard', extend(data, { id: req.params.id }))
 );
 app.get('/:id/vote', (req, res) =>
-  res.render('pages/vote', extend(data, { id: req.params.id })),
+  res.render('pages/vote', extend(data, { id: req.params.id }))
 );
 
 server.listen(app.get('port'), () => {
