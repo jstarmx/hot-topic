@@ -56,8 +56,10 @@ class Dashboard extends Component {
   }
 
   destroy() {
-    const confirm = window.confirm( // eslint-disable-line no-alert
-      `Are you sure you want to delete ${this.state.title}? This cannot be undone.`
+    // eslint-disable-next-line no-alert
+    const confirm = window.confirm(
+      `Are you sure you want to delete ${this.state
+        .title}? This cannot be undone.`,
     );
     if (confirm) {
       this.props.destroySession(this.props.id);
@@ -87,14 +89,20 @@ class Dashboard extends Component {
             <thead>
               <tr>
                 <th>Topic</th>
-                <th><span className="dashboard__light dashboard__light--red" /></th>
-                <th><span className="dashboard__light dashboard__light--amber" /></th>
-                <th><span className="dashboard__light dashboard__light--green" /></th>
+                <th>
+                  <span className="dashboard__light dashboard__light--red" />
+                </th>
+                <th>
+                  <span className="dashboard__light dashboard__light--amber" />
+                </th>
+                <th>
+                  <span className="dashboard__light dashboard__light--green" />
+                </th>
               </tr>
             </thead>
             <tbody>
               {topics.map(props =>
-                <Topic {...props} remove={this.remove} key={props.id} />
+                <Topic {...props} remove={this.remove} key={props.id} />,
               )}
             </tbody>
           </table>
@@ -108,10 +116,7 @@ class Dashboard extends Component {
             />
           </form>
           <div className="dashboard__delete">
-            <button
-              className="btn btn-outline-danger"
-              onClick={this.destroy}
-            >
+            <button className="btn btn-outline-danger" onClick={this.destroy}>
               Delete this session
             </button>
           </div>

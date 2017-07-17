@@ -18,14 +18,14 @@ class Index extends Component {
       <div>
         <Header />
         <div className="container">
-          <h1 className="display-4">
-            Hot Topic!
-          </h1>
+          <h1 className="display-4">Hot Topic!</h1>
           {adminRights &&
-            <button className="btn btn-primary btn-lg btn-block" onClick={createSession}>
+            <button
+              className="btn btn-primary btn-lg btn-block"
+              onClick={createSession}
+            >
               <Zap className="index__zap" /> Start a new session
-            </button>
-          }
+            </button>}
           <table className="table">
             <thead>
               <tr>
@@ -33,7 +33,7 @@ class Index extends Component {
               </tr>
             </thead>
             <tbody>
-              {sessions.map(({ id, title, created }) => (
+              {sessions.map(({ id, title, created }) =>
                 <tr key={id}>
                   <td className="index__row">
                     <button
@@ -47,25 +47,23 @@ class Index extends Component {
                     </span>
                     {title.replace(/%27/g, "'")}
                     <div className="index__buttons">
-                      {adminRights ?
-                        <a
-                          href={`/${id}/dashboard`}
-                          className="btn btn-secondary index__btn"
-                        >
-                          Manage
-                        </a>
-                      :
-                        <a
-                          href={`/${id}/vote`}
-                          className="btn btn-primary index__btn"
-                        >
-                          Vote
-                        </a>
-                      }
+                      {adminRights
+                        ? <a
+                            href={`/${id}/dashboard`}
+                            className="btn btn-secondary index__btn"
+                          >
+                            Manage
+                          </a>
+                        : <a
+                            href={`/${id}/vote`}
+                            className="btn btn-primary index__btn"
+                          >
+                            Vote
+                          </a>}
                     </div>
                   </td>
-                </tr>
-              )) }
+                </tr>,
+              )}
             </tbody>
           </table>
         </div>

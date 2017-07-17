@@ -66,31 +66,28 @@ let config;
 
 switch (process.env.npm_lifecycle_event) {
   case 'dev':
-    config = merge(
-      common,
-      {
-        devtool: 'eval-source-map',
-        module: {
-          rules: [
-            {
-              test: /\.jsx?$/,
-              enforce: 'pre',
-              include: PATHS.scripts,
-              loader: 'eslint-loader',
-            },
-          ],
-        },
-        plugins: [
-          new StyleLintPlugin({
-            configFile: './.stylelintrc.json',
-            context: PATHS.styles,
-            syntax: 'scss',
-            quiet: true,
-          }),
-          new WebpackNotifierPlugin({ alwaysNotify: true }),
+    config = merge(common, {
+      devtool: 'eval-source-map',
+      module: {
+        rules: [
+          {
+            test: /\.jsx?$/,
+            enforce: 'pre',
+            include: PATHS.scripts,
+            loader: 'eslint-loader',
+          },
         ],
-      }
-    );
+      },
+      plugins: [
+        new StyleLintPlugin({
+          configFile: './.stylelintrc.json',
+          context: PATHS.styles,
+          syntax: 'scss',
+          quiet: true,
+        }),
+        new WebpackNotifierPlugin({ alwaysNotify: true }),
+      ],
+    });
     break;
 
   default:

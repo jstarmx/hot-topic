@@ -1,6 +1,4 @@
-import {
-  SESSION_RECEIVED,
-} from '../actions/sessions';
+import { SESSION_RECEIVED } from '../actions/sessions';
 
 const votedOn = ({ room, data: topics }) => {
   const voteHistory = JSON.parse(localStorage.getItem('votedOn')) || {};

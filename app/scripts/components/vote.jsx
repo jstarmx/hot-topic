@@ -6,9 +6,12 @@ import Check from './icons/check';
 import VoteButton from './vote_button';
 import Header from '../containers/header';
 
-const getVotedOn = () => (JSON.parse(localStorage.getItem('votedOn')) || {});
-const setVotedOn = (votedOn) => {
-  localStorage.setItem('votedOn', JSON.stringify({ ...getVotedOn(), ...votedOn }));
+const getVotedOn = () => JSON.parse(localStorage.getItem('votedOn')) || {};
+const setVotedOn = votedOn => {
+  localStorage.setItem(
+    'votedOn',
+    JSON.stringify({ ...getVotedOn(), ...votedOn }),
+  );
 };
 
 class Vote extends Component {
@@ -45,24 +48,20 @@ class Vote extends Component {
       <div>
         <Header title={title} />
         <div className="container">
-          {id ?
-            <div>
-              <h1 className="display-4">
-                {topic.replace(/%27/g, "'")}
-              </h1>
-              {votedOn ?
-                <Check className="vote__tick" />
-              :
-                <div className="scores">
-                  <VoteButton send={this.send} color="red" />
-                  <VoteButton send={this.send} color="amber" />
-                  <VoteButton send={this.send} color="green" />
-                </div>
-              }
-            </div>
-          :
-            <p className="mt-5">Waiting for something to vote on...</p>
-          }
+          {id
+            ? <div>
+                <h1 className="display-4">
+                  {topic.replace(/%27/g, "'")}
+                </h1>
+                {votedOn
+                  ? <Check className="vote__tick" />
+                  : <div className="scores">
+                      <VoteButton send={this.send} color="red" />
+                      <VoteButton send={this.send} color="amber" />
+                      <VoteButton send={this.send} color="green" />
+                    </div>}
+              </div>
+            : <p className="mt-5">Waiting for something to vote on...</p>}
         </div>
       </div>
     );

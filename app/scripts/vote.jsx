@@ -12,5 +12,5 @@ render(
   <Provider store={store(id)}>
     <Vote id={id} />
   </Provider>,
-  vote
+  vote,
 );

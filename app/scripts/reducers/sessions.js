@@ -1,6 +1,4 @@
-import {
-  SESSIONS_RECEIVED,
-} from '../actions/sessions';
+import { SESSIONS_RECEIVED } from '../actions/sessions';
 
 export default (state = [], { type, payload }) => {
   switch (type) {

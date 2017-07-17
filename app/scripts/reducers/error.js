@@ -1,6 +1,4 @@
-import {
-  ERROR,
-} from '../actions/sessions';
+import { ERROR } from '../actions/sessions';
 
 export default (state = '', { type, payload }) => {
   switch (type) {

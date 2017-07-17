@@ -17,12 +17,14 @@ const Topic = ({ id, topic, red, amber, green, remove }) => {
         </button>
         {topic.replace(/%27/g, "'")}
       </td>
-      {map(colors, (score, name) => (
+      {map(colors, (score, name) =>
         <td className={`dashboard__score dashboard__score--${name}`} key={name}>
           <ScoreBar voteCount={voteCount} score={score} color={name} />
-          <span className="dashboard__score-text">{score}</span>
-        </td>
-      ))}
+          <span className="dashboard__score-text">
+            {score}
+          </span>
+        </td>,
+      )}
     </tr>
   );
 };

@@ -1,5 +1,6 @@
 {
-  "extends": "airbnb",
+  "plugins": ["prettier"],
+  "extends": ["airbnb", "prettier", "prettier/react"],
   "env": {
     "browser": true,
     "jasmine": true,
@@ -7,13 +8,6 @@
     "node": true
   },
   "rules": {
-    "comma-dangle": ["error", {
-      "arrays": "always-multiline",
-      "objects": "always-multiline",
-      "imports": "always-multiline",
-      "exports": "always-multiline",
-      "functions": "never"
-    }],
     "indent": "off",
     "no-underscore-dangle": "off",
     "space-before-function-paren": ["error", {
@@ -26,6 +20,10 @@
       "optionalDependencies": false,
       "peerDependencies": false
     }],
-    "react/prefer-es6-class": ["warn", "always"]
+    "react/prefer-es6-class": ["warn", "always"],
+    "prettier/prettier": ["error", {
+      "singleQuote": true,
+      "trailingComma": "all"
+    }]
   }
 }
