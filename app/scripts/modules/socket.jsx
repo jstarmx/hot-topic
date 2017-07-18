@@ -1,5 +1,4 @@
-import React from 'react';
-import { render } from 'react-dom';
+import { h, render } from 'preact';
 import Socket from 'socket.io-client';
 
 import Error from '../components/error';

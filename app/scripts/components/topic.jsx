@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { h } from 'preact';
 import { map } from 'lodash';
 
 import ScoreBar from './score_bar';

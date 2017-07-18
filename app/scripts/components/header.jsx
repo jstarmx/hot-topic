@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { h } from 'preact';
 
 import Home from './icons/home';
 

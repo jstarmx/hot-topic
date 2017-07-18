@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { h, Component } from 'preact';
 import { bindAll } from 'lodash';
 
 import Check from './icons/check';
@@ -40,8 +40,7 @@ class Vote extends Component {
     setVotedOn({ [room]: votedOn });
   }
 
-  render() {
-    const { title, votedOn } = this.props;
+  render({ title, votedOn }) {
     const { id, topic } = this.currentTopic();
 
     return (

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 /* eslint-disable max-len */
-import React from 'react';
+import { h } from 'preact';
 
 const Home = ({ className }) =>
   <svg

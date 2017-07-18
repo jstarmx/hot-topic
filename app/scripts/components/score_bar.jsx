@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { h } from 'preact';
 
 const ScoreBar = ({ voteCount, score, color }) => {
   const classList = `dashboard__score-bg dashboard__score-bg--${color}`;

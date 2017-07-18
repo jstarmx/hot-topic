@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect } from 'preact-redux';
 
 import Index from '../components/index';
 import {

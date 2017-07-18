@@ -1,6 +1,5 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
+import { render, h } from 'preact';
+import { Provider } from 'preact-redux';
 import Index from './containers/index';
 import store from './store/';
 

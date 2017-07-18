@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import { h } from 'preact';
 
 const Error = ({ message }) =>
   <div className="container mt-3 mb-3">

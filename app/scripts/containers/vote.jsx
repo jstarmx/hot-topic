@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect } from 'preact-redux';
 
 import Vote from '../components/vote';
 import { fetchSession, vote } from '../actions/sessions';

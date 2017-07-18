@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { h, Component } from 'preact';
 
 import { formattedDate } from '../helpers/date';
 import X from './icons/x';
@@ -11,9 +11,7 @@ class Index extends Component {
     this.props.fetchSessions();
   }
 
-  render() {
-    const { createSession, destroySession, sessions, adminRights } = this.props;
-
+  render({ createSession, destroySession, sessions, adminRights }) {
     return (
       <div>
         <Header />

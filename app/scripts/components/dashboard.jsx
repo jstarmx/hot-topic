@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { h, Component } from 'preact';
 import { bindAll } from 'lodash';
 
 import Topic from './topic';
@@ -67,10 +67,7 @@ class Dashboard extends Component {
     }
   }
 
-  render() {
-    const { clients, topics } = this.props;
-    const { title } = this.state;
-
+  render({ clients, topics }, { title }) {
     return (
       <div>
         <Header clients={clients} />
